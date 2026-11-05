@@ -1,0 +1,14 @@
+{
+  "app/src/main/java/com/melber/barcodecmm/MainActivity.kt": {
+    "sha256": "c3496648d1dba6aa51d70951f3424493b955aee641ccd5b02aa797396d92b8fd",
+    "lines": 361
+  },
+  "app/src/main/java/com/melber/barcodecmm/Settings.kt": {
+    "sha256": "f468d95aa032e0cd0d3d9fbb459bc479f35e90a0010ccfbc9ca6f20bc533f626",
+    "lines": 65
+  },
+  "app/src/main/java/com/melber/barcodecmm/SettingsActivity.kt": {
+    "sha256": "db3ec5c02225c68e9480a2bd2837390bcb4ca647df67afbdc889217627d6611d",
+    "lines": 51
+  }
+}

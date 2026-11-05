@@ -1,0 +1,46 @@
+name: Android-APK bauen
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Tests
+        run: python -m unittest discover -s tests -v
+      - name: Build-Werkzeuge
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git zip unzip autoconf automake libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev autopoint gettext
+          python -m pip install -r requirements-build.txt
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.buildozer
+            .buildozer
+          key: android-v1-${{ runner.os }}-${{ hashFiles('buildozer.spec', 'requirements-build.txt') }}
+      - name: SDK-Lizenzen für den automatischen Build aktivieren
+        run: sed -i 's/android.accept_sdk_license = False/android.accept_sdk_license = True/' buildozer.spec
+      - name: Debug-APK bauen
+        run: buildozer -v android debug
+      - name: APK bereitstellen
+        uses: actions/upload-artifact@v4
+        with:
+          name: Barcode-Checker-Python-APK
+          path: bin/*.apk
+          if-no-files-found: error
